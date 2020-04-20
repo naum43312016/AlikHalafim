@@ -1,0 +1,272 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@using Microsoft.AspNetCore.Mvc.Rendering
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AlikHalafim</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/rSidebar.css" />
+    <link rel="stylesheet" href="~/css/footer.css" />
+    <link rel="stylesheet" href="~/css/productgrid.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/alertify.min.js"></script>
+
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/alertify.min.css" />
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/themes/default.min.css" />
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.4/build/css/themes/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+</head>
+<body>
+
+    <div class="d-flex toggled" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading">בחר את הרכב שלך </div>
+            <div class="list-group list-group-flush">
+                @if (!HttpContextAccessor.HttpContext.Request.Cookies.ContainsKey("car"))
+                {
+                    <form id="carPickerForm" method="post" asp-controller="Vehicle" asp-action="AddVehicle">
+                        <select id="makeVehicle" onchange="modelPickerAppend()" class="selectpicker" title="Manufacturer">
+                        </select>
+                        <select id="modelVehicle" disabled onchange="yearPickerAppend()" class="selectpicker" title="Model">
+                        </select>
+                        <select id="yearVehicle" disabled onchange="enginePickerAppend()" class="selectpicker" title="Year">
+                        </select>
+                        <select id="engineVehicle" disabled onchange="enginePickerSelected()" class="selectpicker" title="Engine">
+                        </select>
+                        <input name="makeValue" hidden id="makeValue" type="text" />
+                        <input name="modelValue" hidden id="modelValue" type="text" />
+                        <input name="yearValue" hidden id="yearValue" type="text" />
+                        <input name="engineValue" hidden id="engineValue" type="text" />
+                        <button disabled id="vehicleSearchBtn" type="submit" style="width:100%" class="btn btn-success">חפש</button>
+                    </form>
+                }
+                else
+                {
+                    string car = HttpContextAccessor.HttpContext.Request.Cookies["car"];
+                    <p>רכב שלך</p>
+                    <p>@car</p>
+                    <a asp-controller="SubCategory" asp-action="Index" class="btn btn bg-primary" type="button">לחלקים</a>
+                    <a asp-controller="Vehicle" asp-action="RemoveVehicle" type="button" class="btn btn bg-danger">למחוק</a>
+                }
+
+
+            </div>
+        </div>
+        @await Component.InvokeAsync("Menu")
+
+        @{
+            var controller = ViewContext.RouteData.Values["Controller"];
+            if (controller.Equals("Home"))
+            {
+                <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" src="~/img/slide2.png" alt="First slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="~/img/slide1.png" alt="Second slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="~/img/slide3.png" alt="Third slide">
+                        </div>
+                    </div>
+                    <div class="carousel-caption">
+                        <h2 class="hide-on-mobile">אליק חלפי רחובות</h2>
+                        <h3 class="hide-on-mobile">חלקים איכותיים במחירים זולים</h3>
+                        <a
+                           asp-controller="SubCategory" asp-action="Index"
+                           id="btnPartsLayout"
+                           class="btn btn-lg"
+                           onmouseover="this.style.backgroundColor = 'black'"
+                           onmouseout="this.style.backgroundColor = '#d10546'"
+                           >
+                        לחלקים</a>
+                    </div>
+                </div>
+            }
+        }
+        <div class="container" id="main">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+    </div>
+    <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+
+
+
+
+
+    <partial name="/Views/Shared/Footer.cshtml" />
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/6374d0af9d.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+
+
+        //Make
+        $(document).ready(function () {
+            $.ajax({
+                url: "https://databases.one/api/?format=json&select=make&api_key=d53db5a4c08ff6b94247f0138",
+                type: "GET",
+                success: function (response) {
+                    response ? successRes(response.result) : fail();
+                }
+            });
+        });
+        function successRes(response) {
+            for (var i = 0; i < response.length; i++) {
+                $('#makeVehicle').append($('<option>', {
+                    value: response[i].make_id,
+                    text: response[i].make
+                }));
+            }
+            $('#makeVehicle').selectpicker('refresh');
+        };
+        function modelPickerAppend() {
+            let make = $('#makeVehicle').val();
+            document.getElementById('makeValue').value = $('#makeVehicle option:selected').text();
+            $('#modelVehicle').empty();
+            $('#modelVehicle').removeAttr("disabled");
+            $('#modelVehicle').selectpicker('refresh');
+            $.ajax({
+                url: "https://databases.one/api/?format=json&select=model&make_id="
+                    + make +
+                    "& api_key=d53db5a4c08ff6b94247f0138",
+                type: "GET",
+                success: function (response) {
+                    var res = response.result;
+                    for (var i = 0; i < res.length; i++) {
+                        $('#modelVehicle').append($('<option>', {
+                            value: res[i].model_id,
+                            text: res[i].model
+                        }));
+                    }
+                    $('#modelVehicle').selectpicker('refresh');
+                }
+            });
+        }
+
+
+        function yearPickerAppend() {
+            let make = $('#makeVehicle').val();
+            let model = $('#modelVehicle').val();
+            document.getElementById('modelValue').value = $('#modelVehicle option:selected').text();
+            $('#yearVehicle').empty();
+            $('#yearVehicle').removeAttr("disabled");
+            $('#yearVehicle').selectpicker('refresh');
+            $.ajax({
+                url: "https://databases.one/api/?format=json&select=year&make_id="
+                    + make
+                    + "&model_id=" +
+                    model +
+                    "& api_key=d53db5a4c08ff6b94247f0138",
+                type: "GET",
+                success: function (response) {
+                    var res = response.result;
+                    for (var i = 0; i < res.length; i++) {
+                        $('#yearVehicle').append($('<option>', {
+                            value: res[i].year,
+                            text: res[i].year
+                        }));
+                    }
+                    $('#yearVehicle').selectpicker('refresh');
+                }
+            });
+        }
+
+        function enginePickerAppend() {
+            let make = $('#makeVehicle').val();
+            let model = $('#modelVehicle').val();
+            let year = $('#yearVehicle').val();
+            document.getElementById('yearValue').value = $('#yearVehicle option:selected').text();
+            var engines = [];
+            $('#engineVehicle').empty();
+            $('#engineVehicle').removeAttr("disabled");
+            $('#engineVehicle').selectpicker('refresh');
+            $.ajax({
+                url: "https://databases.one/api/?format=json&select=trim&make_id="
+                    + make
+                    + "&model_id=" +
+                    model +
+                    "&year=" +
+                    year +
+                    "& api_key=d53db5a4c08ff6b94247f0138",
+                type: "GET",
+                success: function (response) {
+                    var res = response.result;
+                    for (var i = 0; i < res.length; i++) {
+                        let trim = res[i].trim;
+                        let index = trim.lastIndexOf('.');
+                        let str = trim.slice(index - 1, index + 2);
+                        if (!engines.includes(str)) {
+                            $('#engineVehicle').append($('<option>', {
+                                value: str,
+                                text: str
+                            }));
+                            engines.push(str);
+                        }
+                    }
+                    $('#vehicleSearchBtn').removeAttr("disabled");
+                    $('#engineVehicle').selectpicker('refresh');
+                }
+            });
+        }
+        /*function onSubmitForm() {
+            let make = $("#makeVehicle option:selected").text();
+            let model = $("#modelVehicle option:selected").text();
+            let year = $("#yearVehicle option:selected").text();
+            let engine = $("#engineVehicle option:selected").text();
+            let vehicle = make + " " + model + " " + engine + " " + year;
+            document.getElementById('vehicleInfo').value = vehicle;
+        }*/
+
+        function enginePickerSelected() {
+            document.getElementById('engineValue').value = $('#engineVehicle option:selected').text();
+        }
+
+        function fail() {
+            console.log("Server Error can't find vehicle");
+        }
+    </script>
+    
+
+    <script src="~/js/table-search.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,37 @@
+﻿@model List<PartsCategoryViewModel>
+@using AlikHalafim.ViewModel
+@{
+    ViewData["Title"] = "Index";
+    var car = ViewBag.car;
+}
+@if (car.Length == 0)
+{
+    <script>
+        var notification = alertify.notify('נא לבחור רכב', 'success', 5, function () { });
+        $("#wrapper").toggleClass("toggled");
+    </script>
+}
+else
+{
+    <script>
+        var notification = alertify.notify('רכב נבחר', 'success', 5, function () { });
+    </script>
+}
+
+<div class="row" dir="rtl">
+    @foreach (PartsCategoryViewModel catVM in Model)
+    {
+        <div class="col-md-3 col-lg-3 col-sm-6 text-center">
+            <div dir="rtl" class="text-right">
+                <img src="@catVM.Main.CategoryImage" class="text-center" alt="Card image cap">
+                <p class="card-text text-right" style="color:#d16c0d;">@catVM.Main.CategoryName</p>
+                @foreach (Category category in catVM.SubCategories)
+                {
+                    <a asp-controller="PartsCategory"
+                       asp-action="GetProducts" asp-route-id="@category.Id"
+                       class="cat-link">@category.CategoryName</a>
+                }
+            </div>
+        </div>
+    }
+</div>

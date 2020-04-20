@@ -1,0 +1,45 @@
+﻿@model SignInModel
+@{
+    ViewData["Title"] = "SignIn";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 mx-auto">
+            @if (Model.Error)
+            {
+                <div class="text-danger text-center">
+                    <span>@Model.ErrorMessage</span>
+                </div>
+            }
+            <div class="card">
+                <article class="card-body">
+                    <h4 class="card-title text-center mb-4 mt-1">כניסה</h4>
+                    <hr>
+                    <form method="post" asp-controller="Auth" asp-action="SignIn">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="far fa-envelope-open"></i> </span>
+                                </div>
+                                <input asp-for="@Model.Email" class="form-control" placeholder="Email" type="email">
+                            </div> <!-- input-group.// -->
+                        </div> <!-- form-group// -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fas fa-lock"></i></span>
+                                </div>
+                                <input asp-for="@Model.Password" class="form-control" placeholder="Password" type="password">
+                            </div> <!-- input-group.// -->
+                        </div> <!-- form-group// -->
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block"> כניסה  </button>
+                        </div> <!-- form-group// -->
+                        <p class="text-center"><a href="#" class="btn" dir="rtl">שיכחת סיסמה?</a></p>
+                    </form>
+                </article>
+            </div> <!-- card.// -->
+        </div>
+    </div>
+</div>

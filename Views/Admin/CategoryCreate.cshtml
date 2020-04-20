@@ -1,0 +1,47 @@
+﻿@model AlikHalafim.Models.Category
+@{
+    ViewData["Title"] = "Create";
+    var categories = ViewBag.Categories;
+}
+
+<div class="row register-form">
+    <div class="col-md-8 offset-md-2">
+        <form class="custom-form" method="post" enctype="multipart/form-data" asp-controller="Admin" asp-action="CategoryCreateForm">
+            <h1>צור קטגוריה</h1>
+            <div class="form-row form-group">
+                <div class="col-sm-6 input-column"><input asp-for="@Model.CategoryName" required class="form-control" type="text"></div>
+                <div class="col-sm-4 label-column"><label class="col-form-label" for="name-input-field">שם </label></div>
+            </div>
+            <div class="form-row form-group">
+
+                <div class="col-sm-6 input-column">
+                    <select asp-for="@Model.ParentCategoryId" class="form-control" id="parentcategory">
+                        <option value=""></option>
+                        @foreach (var category in categories)
+                        {
+                            <option value="@category.Id">@category.CategoryName</option>
+                        }
+
+                    </select>
+                </div>
+                <div class="col-sm-4 label-column">
+                    <label for="parentcategory" class="bmd-label-floating">Parent Category</label>
+                </div>
+            </div>
+
+
+            <div class="form-row form-group">
+
+                <div class="col-sm-6">
+                    <input id="fileupload" name="imageFile" required class="form-control" type="file">
+                </div>
+                <div class="col-sm-4 label-column">
+                    <label for="fileupload" class="bmd-label-floating">תמונה</label>
+                </div>
+            </div>
+
+            <button class="btn btn-success submit-button" type="submit">צור</button>
+        </form>
+    </div>
+</div>
+

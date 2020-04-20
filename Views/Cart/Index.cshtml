@@ -1,0 +1,88 @@
+﻿@model List<CartForCartPage>
+@{
+    ViewData["Title"] = "Index";
+    var subTotal = ViewBag.subtotal;
+    var total = ViewBag.totalWithDelivery;
+}
+
+@if (Model != null && Model.Count > 0)
+{
+        <div class="container">
+            <div class="row" dir="rtl">
+                <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+
+                    <!-- Shopping cart table -->
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="p-2 px-3 text-uppercase"
+                                             style="text-align:right;">מוצר</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">מחיר</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">כמות</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">מחיקה</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (CartForCartPage cartObj in Model)
+                                {
+                                    <tr>
+                                        <th scope="row" class="border-0"
+                                            style="text-align:right;">
+                                            <div class="p-2">
+                                                <div class="ml-3 d-inline-block align-middle" dir="rtl">
+                                                    <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">@cartObj.Product.ProductName</a></h5><span class="text-muted font-weight-normal font-italic d-block" dir="rtl">יצרן:@cartObj.Product.Manufacturer</span>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td class="border-0 align-middle"><strong>&#8362;@cartObj.Product.Price</strong></td>
+                                        <td class="border-0 align-middle"><strong>@cartObj.Quantity</strong></td>
+                                        <td class="border-0 align-middle">
+                                            <a asp-controller="Cart" asp-action="RemoveFromCart"
+                                               asp-route-id="@cartObj.Product.Id"
+                                               class="text-dark"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End -->
+                </div>
+            </div>
+
+            <div class="row py-5 p-4 bg-white rounded shadow-sm justify-content-center">
+                <div class="col-lg-6">
+                    <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">הזמנה </div>
+                    <div class="p-4">
+                        <ul class="list-unstyled mb-4">
+                            <li class="d-flex justify-content-between py-3 border-bottom" dir="rtl"><strong class="text-muted">מחיר </strong><strong>&#8362;@subTotal</strong></li>
+                            <li class="d-flex justify-content-between py-3 border-bottom" dir="rtl"><strong class="text-muted">משלוח</strong><strong>&#8362;30.00</strong></li>
+                            <li class="d-flex justify-content-between py-3 border-bottom" dir="rtl">
+                                <strong class="text-muted">סהכ"ל</strong>
+                                <h5 class="font-weight-bold">&#8362;@total</h5>
+                            </li>
+                        </ul>
+                        <form method="post" asp-controller="Order" asp-action="Index">
+                            <input hidden name="total" value="@total" />
+                            <button type="submit" class="btn btn-dark rounded-pill py-2 btn-block">לקופה</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--Cart end-->
+}
+else
+{
+    <h2>אין מוצרים בסל הקניות</h2>
+}

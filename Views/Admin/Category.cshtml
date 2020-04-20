@@ -1,0 +1,79 @@
+﻿@using AlikHalafim.Models
+@model IEnumerable<Category>
+@{
+    ViewData["Title"] = "Categories";
+    var messageCategoryRemove = @TempData["categoryRemoveMessage"] as string;
+}
+
+
+@if (messageCategoryRemove != null && messageCategoryRemove.Length > 0)
+{
+    <script>
+        alert("You Can't remove parent category, first remove or edit it's child category");
+    </script>
+}
+<div class="container-fluid mt-3">
+
+    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-dark mb-0">Categories</h3>
+        <a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button"asp-controller="Admin" asp-action="CategoryCreate">
+            <i class="fas fa-download fa-sm text-white-50"></i>&nbsp;צור קטגוריה
+        </a>
+    </div>
+
+
+
+    <div class="row">
+        <div class="form-group pull-right">
+            <input type="text" class="search form-control" placeholder="חיפוש">
+        </div>
+
+        <span class="counter pull-right"></span>
+        <table class="table table-hover table-bordered results">
+            <thead>
+                <tr>
+                    <th>Category Name</th>
+                    <th>Parent Category</th>
+                    <th>Edit</th>
+                    <th>Remove</th>
+                </tr>
+                <tr class="warning no-result">
+                    <td colspan="4"><i class="fa fa-warning"></i> No result</td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var cat in Model)
+                    {
+                        <tr>
+                            <td>@cat.CategoryName</td>
+
+
+                            @if (cat.ParentCategory != null)
+                            {
+                                <td>@cat.ParentCategory.CategoryName</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td>
+                                <a asp-controller="Admin" asp-action="CategoryEdit" asp-route-id="@cat.Id"
+                                   style="color:black">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a onclick="if (confirm('אתה בטוח?')) { window.location.href = '@Url.Action("CategoryRemove", "Admin", new { id = cat.Id })'; }"
+                                   style="color:black;cursor:pointer;">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="container-fluid mt-3">
+
+    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-dark mb-0">Categories</h3>
+        <a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" asp-controller="AdminProduct" asp-action="ProductCreate">
+            <i class="fas fa-download fa-sm text-white-50"></i>&nbsp;הוסף מוצר
+        </a>
+    </div>
+
+
+
+    <div class="row">
+        <div class="form-group pull-right">
+            <input type="text" class="search form-control" placeholder="חיפוש">
+        </div>
+
+        <span class="counter pull-right"></span>
+        <table class="table table-hover table-bordered results">
+            <thead>
+                <tr>
+                    <th>שם מוצר</th>
+                    <th>שם קטרגוריה</th>
+                    <th>מחיר</th>
+                    <th>כמות</th>
+                    <th>Details</th>
+                    <th>Edit</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    @foreach (var product in Model)
+                    {
+                <tr>
+                    <td>@product.ProductName</td>
+                    <td>@product.Category.CategoryName</td>
+                    <td>@product.Price</td>
+                    <td>@product.Quantity</td>
+                    <td>
+                        <a asp-controller="AdminProduct" asp-action="ProductDetails" asp-route-id="@product.Id"
+                           style="color:black">
+                            <i class="fas fa-info"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-controller="AdminProduct" asp-action="ProductEdit" asp-route-id="@product.Id"
+                           style="color:black">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a onclick="if (confirm('אתה בטוח?')) { window.location.href = '@Url.Action("ProductRemove", "AdminProduct", new { id = product.Id })'; }"
+                           style="color:black;cursor:pointer;">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
