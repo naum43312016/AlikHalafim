@@ -1,0 +1,65 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "ProductDetails";
+}
+
+    <div class="container" dir="rtl">
+        <ul class="list-group" dir="rtl">
+            <li class="list-group-item text-right" dir="rtl">
+                תמונה: <img src="/../@Model.ProductImage"
+                            style="width:100px;height:100px;" />
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                מחיר:  @Model.Price
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                מקט:  @Model.CatalogNumber
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                יצרן:  @Model.Manufacturer
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                קטרגוריה:  @Model.Category.CategoryName
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                כמות:  @Model.Quantity
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                Rank:  @Model.Rank
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                מספרים מקורים:  @Model.OriginalNumbers
+            </li>
+            @if (Model.Vehicles != null && Model.Vehicles.Length > 0)
+            {
+                String[] veh = Model.Vehicles.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                if (veh.Length > 0)
+                {
+                    <li class="list-group-item text-right" dir="rtl"
+                        style="font-size:25px;">
+                        רכבים:
+                        <ul dir="rtl">
+                            @foreach (String s in veh)
+                            {
+                                <li class="text-right" dir="rtl">
+                                    @s
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                פרטים:  @Model.BigDescription
+            </li>
+        </ul>
+    </div>
+

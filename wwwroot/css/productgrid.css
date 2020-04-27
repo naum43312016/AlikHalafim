@@ -21,8 +21,8 @@
         }
 
     .product-grid .product-new-label {
-        color: #000;
-        background-color: #FFD800;
+        color: white;
+        background-color: red;
         font-size: 16px;
         font-weight: 600;
         text-transform: uppercase;
@@ -40,8 +40,12 @@
         font-weight: 700;
         text-transform: capitalize;
         margin: 0 0 3px;
+       
     }
-
+    h3.title{
+        
+        height:auto;
+    }
         .product-grid .title a {
             color: #666;
             transition: all 0.3s ease;
@@ -115,4 +119,3 @@
     }
 }
 
-License Terms

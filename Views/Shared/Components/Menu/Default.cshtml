@@ -39,7 +39,7 @@
                     }
                     }
 
-                    <a href="#">צור קשר</a>
+                    <a asp-controller="Home" asp-action="Contact">צור קשר</a>
                     @if (User.IsInRole("Admin"))
                     {
                         <div class="dropdown">
@@ -47,7 +47,7 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownAdmin">
                                 <a class="dropdown-item" asp-controller="Admin" asp-action="Category">קטגוריות</a>
                                 <a class="dropdown-item" asp-controller="Admin" asp-action="Users">משתמשים</a>
-                                <a class="dropdown-item" asp-controller="aaa" asp-action="Index">הזמנות</a>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="Orders">הזמנות</a>
                                 <a class="dropdown-item" asp-controller="AdminProduct" asp-action="Index">מוצרים</a>
                             </div>
                         </div>
@@ -58,13 +58,21 @@
     <div id="page-content-wrapper">
 
         <div class="topnav">
-            <a href="/"><i class="fas fa-home"></i></a>
-            <div class="search-container">
-                <form action="/action_page.php">
-                    <input dir="rtl" type="text" placeholder="חיפוש" name="search">
-                    <button type="submit"><i class="fa fa-search"></i></button>
-                </form>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <a href="/"><i class="fas fa-home"></i></a>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="search-container">
+                        <form method="get" asp-controller="Home" asp-action="Search">
+                            <input dir="rtl" type="text" placeholder="חיפוש" name="search">
+                            <input name="page" value="1" hidden />
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
             </div>
+            
         </div>
 
 
@@ -72,7 +80,7 @@
             <button class="btn btn-primary" id="menu-toggle">בחירת רכב</button>
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Cart" asp-action="Index"
+                    <a id="cart-item" class="nav-link" asp-controller="Cart" asp-action="Index"
                        style="font-size:1.25rem;padding:0.25rem,0.75rem"><i class="fas fa-cart-arrow-down"></i></a>
                 </li>
                 <li class="nav-item">

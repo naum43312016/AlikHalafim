@@ -1,25 +1,45 @@
 ﻿@model List<Product>
 @{
     ViewData["Title"] = "Category";
+    var message = ViewBag.message;
 
 }
-
+@if (message != null && message.Length != 0)
+{
+    @if (message.Equals("added"))
+    {
+        <script>
+            var notification = alertify.notify('מוצר הוסף לסל הקניות', 'success', 5, function () { });
+            $("#cart-item").addClass("animated bounce");
+        </script>
+    }
+    else
+    {
+        <script>
+            var notification = alertify.notify('מוצר אזל מהמלאי', 'success', 5, function () { });
+        </script>
+    }
+}
 <div class="row">
     @foreach (var Product in Model)
     {
         <div class="col-md-4 col-sm-12">
             <div class="product-grid">
                 <div class="product-image">
-                    <a asp-controller="Product" asp-action="ProductPageDetail"
+                    @if (Product.Quantity < 1)
+                    {
+                        <span class="product-new-label">אזל</span>
+                    }
+                    <a asp-controller="Product" asp-action="Index"
                        asp-route-id="@Product.Id" class="image">
                         <img class="pic-1" src="/../@Product.ProductImage">
                     </a>
                     <h3 class="title" dir="rtl">
-                        <a asp-controller="Product" asp-action="ProductPageDetail"
+                        <a asp-controller="Product" asp-action="Index"
                            asp-route-id="@Product.Id">@Product.ProductName</a>
                     </h3>
                     <h4 class="title" dir="rtl">
-                        <a asp-controller="Manufacturer" asp-action="ManufacturerProducts"
+                        <a asp-controller="Product" asp-action="ProductsManufacturer"
                            asp-route-man="@Product.Manufacturer">@Product.Manufacturer</a>
                     </h4>
                     <div class="price">&#8362; @Product.Price</div>
@@ -27,7 +47,12 @@
                 <div class="product-content">
                     <span class="add-to-cart">
                         <a asp-controller="Cart" asp-action="Add"
-                           asp-route-id="@Product.Id">הוסף לסל</a>
+                           asp-route-id="@Product.Id"
+                           asp-route-quantity="1"
+                           asp-route-redAction="RegCategory"
+                           asp-route-redCon="Category"
+                           asp-route-categoryid="@Product.CategoryId"
+                           asp-route-pageNum="@ViewBag.currentPage">הוסף לסל</a>
                     </span>
                 </div>
             </div>

@@ -1,49 +1,50 @@
 ﻿  <!-- Site footer -->
-<footer class="site-footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <h6>About</h6>
-                <p class="text-justify" dir="rtl">
-                    חנות חלפים מספר 1
-                </p>
-            </div>
+    <footer class="site-footer">
 
-            <div class="col-xs-6 col-md-3">
-                <h6>קטגוריות</h6>
-                <ul class="footer-links">
-                    <li><a href="#">שמנים</a></li>
-                    <li><a href="#">תוספים</a></li>
-                    <li><a href="#">טיפוח</a></li>
-                    <li><a href="#">אביזרים</a></li>
-                    <li><a href="#">כלי עבודה</a></li>
-                    <li><a href="#">מבצעים</a></li>
-                </ul>
-            </div>
 
-            <div class="col-xs-6 col-md-3">
-                <h6>Quick Links</h6>
-                <ul class="footer-links">
-                    <li><a href="http://scanfcode.com/about/">About Us</a></li>
-                    <li><a href="http://scanfcode.com/contact/">Contact Us</a></li>
-                    <li><a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a></li>
-                    <li><a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a></li>
-                    <li><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
-                </ul>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <h6 style="text-align:right;">עלינו</h6>
+                    <p class="text-justify footer-text" dir="rtl">
+                        חנות חלפים מספר 1
+                    </p>
+                </div>
+
+                <div class="col-xs-6 col-md-3">
+                    <h6>קישורים</h6>
+                    <ul class="footer-links">
+                        <li><a asp-controller="Home" asp-action="Contact">צור קשר</a></li>
+                        <li><a asp-controller="Cart" asp-action="Index">סל הקניות</a></li>
+                        <li><a asp-controller="SubCategory" asp-action="Index">חלקים</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 order-first order-md-last col-xs-12 location" dir="rtl">
+                    <h4 class="mt-lg-0 mt-sm-4 footer-text">כתובת</h4>
+                    <p class="footer-text">רחובות, משה יתום 34</p>
+                    <p class="mb-0 footer-text"><i class="fa fa-phone mr-3"></i>  08-8888888</p>
+                    <p class="footer-text"><i class="fa fa-envelope-o mr-3"></i>  info@hsdf.com</p>
+                    <h6 class="footer-text">  שעות פעילות החנות:</h6>
+                    <p class="mb-0 footer-text">ימים א-ה 7:00-17:00</p>
+                    <p class="footer-text">יום ו 7:00-13:15</p>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <a href="https://github.com/naum43312016" target="_blank" style="color:white;">
+                        <i class="fab fa-github"></i> Created By Naum Asafov
+                    </a>
+                    <span style="float:right;color:white;">
+                        &copy; 2020 אליק חלפי רחובות
+                    </span>
+                </div>
+
+
             </div>
         </div>
-        <hr>
-    </div>
-    <div class="container">
-        <div class="row">
-
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <p class="copyright-text text-right">
-                    Copyright &copy; 2020 אליק חלפי רחובות
-                </p>
-            </div>
-
-
-        </div>
-    </div>
-</footer>
+    </footer>

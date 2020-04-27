@@ -18,5 +18,7 @@ namespace AlikHalafim.Helpers
         public static string PAYMENT_METHOD_PHONE = "בטלפון";
         public static string PAYMENT_METHOD_CREDITCARD = "כרטיס אשראי";
 
+        public static string DELIVERY_MAIL = "דואר";
+
     }
 }

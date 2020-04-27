@@ -1,0 +1,66 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Index";
+    var message = ViewBag.message;
+}
+@if (message != null && message.Length != 0)
+{
+    @if (message.Equals("added"))
+    {
+        <script>
+            var notification = alertify.notify('מוצר הוסף לסל הקניות', 'success', 5, function () { });
+            $("#cart-item").addClass("animated bounce");
+        </script>
+    }
+    else
+    {
+        <script>
+            var notification = alertify.notify('מוצר אזל מהמלאי', 'success', 5, function () { });
+            $("#cart-item").addClass("animated bounce");
+        </script>
+    }
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-sm-12 text-center" style="margin-bottom:10px;">
+            <img class="product-image-detail" src="/../@Model.ProductImage" />
+        </div>
+        <div class="col-lg-6 col-sm-12 justify-content-center">
+            <div class="product-info text-center">
+                <h1 class="center-mob" dir="rtl">@Model.ProductName</h1>
+                <span class="manufacture-product" dir="rtl">יצרן: @Model.Manufacturer</span>
+                <h4 class="price-productpage">&#8362; @Model.Price</h4>
+
+                <form class="form-inline" method="post" asp-controller="Cart"
+                      asp-action="AddProduct">
+                    <div class="form-group form-add">
+                        <input hidden name="id" value="@Model.Id" />
+                        <input type="number" class="form-control text-center input-quan"
+                               min="1"
+                               name="quantity"
+                               value="1">
+                        <button type="submit" class="add-btn">
+                            להוסיף לסל
+                        </button>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-12">
+                        <div style="width: 100%;text-align: right;">
+                            <p style="font-weight: bold;">פרטים</p>
+                        </div>
+
+                        <div style="width:100%;border-top:1px solid silver;text-align: right;">
+                            <p style="padding:15px;" dir="rtl">
+                                @Model.BigDescription
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

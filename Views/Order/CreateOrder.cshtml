@@ -1,0 +1,143 @@
+﻿@model Order
+@{
+    ViewData["Title"] = "הזמנה";
+}
+
+<div class="container">
+    <hr>
+    <form id="contactForm" method="post"
+          asp-controller="Order"
+          asp-action="CreateOrder"
+          dir="rtl">
+
+        <div class="form-row">
+
+            <div class="col-12 col-md-4 py-5 p-4 bg-white rounded shadow-sm"
+                 style="height:280px;">
+                <div class="p-4">
+                    <ul class="list-unstyled mb-4">
+                        <li class="d-flex justify-content-between py-3 border-bottom" dir="rtl"><strong class="text-muted">מחיר </strong><strong>&#8362;@Model.SubTotal</strong></li>
+                        <li class="d-flex justify-content-between py-3 border-bottom" dir="rtl"><strong class="text-muted">משלוח</strong><strong>&#8362;30.00</strong></li>
+                        <li class="d-flex justify-content-between py-3 border-bottom" dir="rtl">
+                            <strong class="text-muted">סהכ"ל</strong>
+                            <h5 class="font-weight-bold">&#8362;@Model.Total</h5>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+            <div class="col-12 col-md-6" id="message">
+                <h2 class="h4 text-center">
+                    הזמנה
+                </h2>
+                <div class="form-group">
+                    <label style="float:right" for="from-name" dir="rtl">שם<span style="float:right" class="required-input text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-user-o"></i></span>
+                        </div>
+                        <input asp-for="@Model.CustomerName"
+                               class="form-control" type="text" required id="from-name"
+                               placeholder="שם">
+                    </div>
+                    <span style="float:right" asp-validation-for="@Model.CustomerName" class="text-danger"></span>
+                </div>
+                <div class="form-group" dir="rtl">
+                    <label style="float:right" for="from-email">אימייל</label><span style="float:right" class="required-input text-danger">*</span>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-envelope-o"></i></span>
+                        </div>
+                        <input asp-for="@Model.Email" class="form-control" type="text" id="from-email" required placeholder="אימייל">
+                    </div>
+                    <span style="float:right" asp-validation-for="@Model.Email" class="text-danger"></span>
+
+                </div>
+                <div class="form-group" dir="rtl">
+                    <label style="float:right" for="from-phone">מספר טלפון</label><span style="float:right" class="required-input text-danger">*</span>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                        </div>
+                        <input asp-for="@Model.PhoneNumber" class="form-control" type="text" id="from-phone" required placeholder="מספר טלפון">
+                    </div>
+                    <span style="float:right" asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+
+                </div>
+                <div class="form-group" dir="rtl">
+                    <label style="float:right" for="from-city">עיר</label><span style="float:right" class="required-input text-danger">*</span>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-city"></i></span>
+                        </div>
+                        <input asp-for="@Model.City" class="form-control" type="text" id="from-city" required placeholder="עיר">
+                    </div>
+                    <span style="float:right" asp-validation-for="@Model.City" class="text-danger"></span>
+
+                </div>
+                <div class="form-group" dir="rtl">
+                    <label style="float:right" for="from-address">רחוב</label><span style="float:right" class="required-input text-danger">*</span>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-road"></i></span>
+                        </div>
+                        <input asp-for="@Model.Address" class="form-control" type="text" id="from-address" required placeholder="רחוב">
+                    </div>
+                    <span style="float:right" asp-validation-for="@Model.Address" class="text-danger"></span>
+                </div>
+                <div class="form-row">
+                    <div class="col-12 col-sm-6 col-md-12 col-lg-6">
+                        <div class="form-group">
+                            <label style="float:right" for="from-house">מספר בית</label><span style="float:right" class="required-input text-danger">*</span>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                </div>
+                                <input asp-for="@Model.HouseNumber" class="form-control" type="text" id="from-house" required placeholder="מספר בית">
+                            </div>
+                            <span style="float:right" asp-validation-for="@Model.HouseNumber" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-12 col-lg-6">
+                        <div class="form-group">
+                            <label style="float:right" for="from-appartment">דירה</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                </div>
+                                <input asp-for="@Model.AppartmentNumber" class="form-control" type="text" id="from-appartment" placeholder="מספר דירה">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" dir="rtl">
+                    <label style="float:right" for="from-mikud">מיקוד</label><span style="float:right" class="required-input text-danger">*</span>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-mail-bulk"></i></span>
+                        </div>
+                        <input asp-for="@Model.PostalCode" class="form-control" type="text" id="from-mikud" required placeholder="מיקוד">
+                    </div>
+                    <span style="float:right" asp-validation-for="@Model.PostalCode" class="text-danger"></span>
+
+                </div>
+                <div class="form-group">
+                    <label style="float:right" for="from-comments">הערות</label>
+                    <textarea asp-for="@Model.Comments" dir="rtl" class="form-control" id="from-comments" rows="3">
+                    </textarea>
+                </div>
+                <div class="form-group" dir="rtl">
+                    <div class="form-row">
+                        <div class="col"><button class="btn btn-primary btn-block" type="submit"><i class="fa fa-chevron-circle-right"></i> לתשלום</button></div>
+                    </div>
+                </div>
+                <hr class="d-flex d-md-none">
+            </div>
+
+        </div>
+    </form>
+</div>
+

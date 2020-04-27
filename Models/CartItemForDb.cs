@@ -18,6 +18,11 @@ namespace AlikHalafim.Models
         [Required]
         public int ProductId { get; set; }
 
+        public string ProductName { get; set; }
+        public string ProductNumber { get; set; }
+
+        public string ProductCurrentPrice { get; set; }
+
         [Required]
         public int OrderId { get; set; }
 

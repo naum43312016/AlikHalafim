@@ -10,11 +10,14 @@ namespace AlikHalafim.Models
     {
         [Key]
         public int Id { get; set; }
+
         public string Status { get; set; }
 
         public string UserId { get; set; }
 
-        
+        public double Total { get; set; }
+        public double SubTotal { get; set; }
+
         public DateTime OrderDate { get; set; }
 
         public string PaymentStatus { get; set; }
@@ -25,19 +28,27 @@ namespace AlikHalafim.Models
         public string DeliveryMethod { get; set; }
 
 
+        [Required(ErrorMessage = "נא למלא")]
+        public string PostalCode { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "נא למלא")]
         public string CustomerName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "נא למלא")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "נא למלא")]
         public string PhoneNumber { get; set; }
 
         public string TransactionId { get; set; }
 
+        [Required(ErrorMessage = "נא למלא")]
         public string City { get; set; }
         
+        [Required(ErrorMessage = "נא למלא")]
         public string Address { get; set; }
 
+        [Required(ErrorMessage = "נא למלא")]
         public string HouseNumber { get; set; }
 
         public string AppartmentNumber { get; set; }

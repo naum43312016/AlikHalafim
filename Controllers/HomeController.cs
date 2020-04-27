@@ -34,8 +34,8 @@ namespace AlikHalafim.Controllers
             }
             if (page < 1) page = 1;
             int productPerPage = 12;
-            int count = _db.Product.Where(r => r.Rank > 7).Include(c => c.Category)
-                .Count();
+            int count = await _db.Product.Where(r => r.Rank > 7).Include(c => c.Category)
+                .CountAsync();
             if (count > 120)
             {
                 productPerPage = 24;
@@ -49,7 +49,7 @@ namespace AlikHalafim.Controllers
             return View(products);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Contact()
         {
             return View();
         }
@@ -58,6 +58,50 @@ namespace AlikHalafim.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+
+
+       
+        public IActionResult Search(string search,int page)
+        {
+            if (TempData["message"] != null)
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+            if (page < 1) page = 1;
+            int productPerPage = 12;
+            int count = _db.Product
+                .Where(r => r.CatalogNumber.Contains(search)
+                || r.OriginalNumbers.Contains(search)
+                || r.BigDescription.Contains(search)
+                || r.ProductName.Contains(search)
+                || r.Manufacturer.Contains(search)
+                || r.Vehicles.Contains(search)
+                )
+                .Include(c => c.Category)
+                .Count();
+            if (count > 120)
+            {
+                productPerPage = 24;
+            }
+            int pagesCount = count / productPerPage;
+            if (count % productPerPage != 0) pagesCount++;
+            List<Product> products = _db.Product
+                .Where(r => r.CatalogNumber.Contains(search)
+                || r.OriginalNumbers.Contains(search)
+                || r.BigDescription.Contains(search)
+                || r.ProductName.Contains(search)
+                || r.Manufacturer.Contains(search)
+                || r.Vehicles.Contains(search)
+                )
+                .Include(c => c.Category)
+                .Skip((page - 1) * productPerPage).Take(productPerPage).ToList();
+            ViewBag.currentPage = page;
+            ViewBag.pagesCount = pagesCount;
+            ViewBag.search = search;
+            return View(products);
         }
     }
 }

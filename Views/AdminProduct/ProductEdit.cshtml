@@ -1,0 +1,301 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "ProductEdit";
+    var categories = ViewBag.Categories;
+}
+
+
+
+<div class="row register-form">
+    <div class="col-md-8 offset-md-2">
+        <form class="custom-form" method="post" enctype="multipart/form-data" asp-controller="AdminProduct" asp-action="ProductEditForm">
+            <h1>Create</h1>
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column"><label class="col-form-label" for="name-input-field">שם </label></div>
+                <div class="col-sm-6 input-column">
+                <input dir="rtl" asp-for="@Model.ProductName"
+                       required class="form-control"
+                       value="@Model.ProductName"
+                       type="text"></div>
+            </div>
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column"><label class="col-form-label" for="name-input-field">מחיר </label></div>
+                <div class="col-sm-6 input-column">
+                <input asp-for="@Model.Price"
+                       value="@Model.Price"
+                       onchange="priceChecker()" id="priceinput"
+                       required class="form-control" type="text"></div>
+            </div>
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column"><label class="col-form-label" for="name-input-field">כמות </label></div>
+                <div class="col-sm-6 input-column">
+                <input asp-for="@Model.Quantity"
+                       value="@Model.Quantity"
+                       required class="form-control" type="number"></div>
+            </div>
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column"><label class="col-form-label" for="name-input-field">פרטים </label></div>
+                <div class="col-sm-6 input-column">
+                <textarea dir="rtl" asp-for="@Model.BigDescription" class="form-control" type="text">
+                    @Model.BigDescription
+                </textarea></div>
+            </div>
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column"><label class="col-form-label" for="name-input-field">יצרן </label></div>
+                <div class="col-sm-6 input-column">
+                <textarea dir="rtl" asp-for="@Model.Manufacturer" 
+                          class="form-control" type="text">
+                    @Model.Manufacturer
+                </textarea></div>
+            </div>
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column"><label class="col-form-label" for="name-input-field">מקט </label></div>
+                <div class="col-sm-6 input-column">
+                <input asp-for="@Model.CatalogNumber"
+                       value="@Model.CatalogNumber"
+                       required class="form-control" type="text"></div>
+            </div>
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column"><label class="col-form-label" for="name-input-field">מקים מקוריים </label></div>
+                <div class="col-sm-6 input-column">
+                <input asp-for="@Model.OriginalNumbers"
+                       value="@Model.OriginalNumbers"
+                       class="form-control" type="text"></div>
+            </div>
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column"><label class="col-form-label" for="name-input-field">Rank </label></div>
+                <div class="col-sm-6 input-column">
+                <input asp-for="@Model.Rank"
+                       value="@Model.Rank"
+                       required class="form-control" type="number"></div>
+            </div>
+            
+
+
+            <input hidden type="text" asp-for="@Model.ProductImage" value="@Model.ProductImage"/>
+            <input hidden type="text" asp-for="@Model.Id" value="@Model.Id"/>
+
+            <div class="form-row form-group">
+                <div class="col-sm-6 label-column">
+                    <select id="makeProduct" onchange="modelAppend()" class="selectpicker" title="Manufacturer">
+                    </select>
+                    <select disabled id="modelProduct" onchange="yearAppend()" class="selectpicker" title="Model">
+                    </select>
+                    <select disabled id="fromYearProduct" class="selectpicker" title="משנה">
+                    </select>
+                    <select disabled id="yearProduct" onchange="engineAppend()" class="selectpicker" title="עד שנה כולל">
+                    </select>
+                    <select disabled id="engineProduct" class="selectpicker" title="Engine">
+                    </select>
+                    <button onclick="addVehicle()" type="button" class="btn btn-success">להוסיף</button>
+                </div>
+                <div class="col-sm-4 input-column">
+                    <textarea id="vehicleList"
+                              asp-for="@Model.Vehicles"
+                              class="form-control" type="text">
+                        @Model.Vehicles
+                    </textarea>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column">
+                    <label for="parentcategory" class="bmd-label-floating">Category</label>
+                </div>
+                <div class="col-sm-6 input-column">
+                    <select required asp-for="@Model.CategoryId" class="form-control" id="parentcategory">
+                        @foreach (var category in categories)
+                        {
+                            if (category.Id == Model.CategoryId)
+                            {
+                                <option value="@category.Id" selected>@category.CategoryName</option>
+                            }
+                            else
+                            { 
+                                <option value="@category.Id">@category.CategoryName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-row form-group">
+                <div class="col-sm-4 label-column">
+                    <label for="fileupload" class="bmd-label-floating">Image</label>
+                </div>
+                <div class="col-sm-6">
+                    <input id="fileupload" name="imageFile" class="form-control" type="file">
+                </div>
+
+            </div>
+
+            <button class="btn btn-success submit-button" id="subbtn" type="submit">לשנות</button>
+        </form>
+    </div>
+</div>
+<script>
+    //Make
+    $(document).ready(function () {
+
+        $.ajax({
+            url: "https://databases.one/api/?format=json&select=make&api_key=d53db5a4c08ff6b94247f0138",
+            type: "GET",
+            success: function (response) {
+                console.log('res');
+                response ? success(response.result) : fail();
+            }
+        });
+    });
+    function success(response) {
+        for (var i = 0; i < response.length; i++) {
+            $('#makeProduct').append($('<option>', {
+                value: response[i].make_id,
+                text: response[i].make
+            }));
+        }
+        $('#makeProduct').selectpicker('refresh');
+    };
+    function modelAppend() {
+
+        let make = $('#makeProduct').val();
+
+        $('#modelProduct').empty();
+        $('#modelProduct').removeAttr("disabled");
+        $('#modelProduct').selectpicker('refresh');
+        $.ajax({
+            url: "https://databases.one/api/?format=json&select=model&make_id="
+                  +make+
+                  "& api_key=d53db5a4c08ff6b94247f0138",
+            type: "GET",
+            success: function (response) {
+                var res = response.result;
+                for (var i = 0; i < res.length; i++) {
+                    $('#modelProduct').append($('<option>', {
+                        value: res[i].model_id,
+                        text: res[i].model
+                    }));
+                }
+                $('#modelProduct').selectpicker('refresh');
+            }
+        });
+    }
+
+
+    function yearAppend() {
+        let make = $('#makeProduct').val();
+        let model = $('#modelProduct').val();
+        $('#fromYearProduct').empty();
+        $('#fromYearProduct').removeAttr("disabled");
+        $('#fromYearProduct').selectpicker('refresh');
+        $('#yearProduct').empty();
+        $('#yearProduct').removeAttr("disabled");
+        $('#yearProduct').selectpicker('refresh');
+        $.ajax({
+            url: "https://databases.one/api/?format=json&select=year&make_id="
+                + make
+                +"&model_id=" +
+                model+
+                "& api_key=d53db5a4c08ff6b94247f0138",
+            type: "GET",
+            success: function (response) {
+                var res = response.result;
+                for (var i = 0; i < res.length; i++) {
+                    $('#fromYearProduct').append($('<option>', {
+                        value: res[i].year,
+                        text: res[i].year
+                    }));
+                    $('#yearProduct').append($('<option>', {
+                        value: res[i].year,
+                        text: res[i].year
+                    }));
+                }
+                $('#fromYearProduct').selectpicker('refresh');
+                $('#yearProduct').selectpicker('refresh');
+            }
+        });
+    }
+
+    function engineAppend() {
+        let make = $('#makeProduct').val();
+        let model = $('#modelProduct').val();
+        let year = $('#yearProduct').val();
+        var engines = [];
+        $('#engineProduct').empty();
+        $('#engineProduct').removeAttr("disabled");
+        $('#engineProduct').selectpicker('refresh');
+        $.ajax({
+            url: "https://databases.one/api/?format=json&select=trim&make_id="
+                + make
+                +"&model_id=" +
+                model +
+                "&year=" +
+                year+
+                "& api_key=d53db5a4c08ff6b94247f0138",
+            type: "GET",
+            success: function (response) {
+                var res = response.result;
+                for (var i = 0; i < res.length; i++) {
+                    let trim = res[i].trim;
+                    let index = trim.lastIndexOf('.');
+                    let str = trim.slice(index - 1, index + 2);
+                    if (!engines.includes(str)) {
+                        $('#engineProduct').append($('<option>', {
+                            value: str,
+                            text: str
+                        }));
+                        engines.push(str);
+                    }
+                }
+                $('#engineProduct').selectpicker('refresh');
+            }
+        });
+    }
+    function addVehicle() {
+        let make = $("#makeProduct option:selected").text();
+        let model = $("#modelProduct option:selected").text();
+        let year = $("#yearProduct option:selected").text();
+        let engine = $("#engineProduct option:selected").text();
+        let veh = $('#vehicleList').val()
+        let vehicle = "";
+
+        let fromYear = parseInt($("#fromYearProduct option:selected").text());
+        let toYear = parseInt($("#yearProduct option:selected").text());
+        if (veh.length == 0) {
+            vehicle = make + " " + model + " " + year + " " + engine;
+            fromYear++;
+        }
+        while (fromYear <= toYear) {
+            vehicle = vehicle + "," + make + " " + model + " " + fromYear.toString() + " " + engine;
+            fromYear++;
+        }
+        //$('#vehicleList').append(vehicle);
+        document.getElementById("vehicleList").value = veh + vehicle;
+        $('#modelProduct').empty();
+        $('#fromYearProduct').empty();
+        $('#yearProduct').empty();
+        $('#engineProduct').empty();
+        $('#modelProduct').selectpicker('refresh');
+        $('#fromYearProduct').selectpicker('refresh');
+        $('#yearProduct').selectpicker('refresh');
+        $('#engineProduct').selectpicker('refresh');
+    }
+
+    function fail() {
+        console.log("Server Error can't find vehicle");
+    }
+
+    function priceChecker() {
+        var price = $("#priceinput").val();
+        var b = price.match(/^[+-]?\d+(\.\d+)?$/);
+        if (b == null) {
+            $('#subbtn').prop("disabled", true);
+        } else {
+            $('#subbtn').prop("disabled", false);
+        }
+    }
+</script>

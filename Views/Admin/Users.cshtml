@@ -18,6 +18,7 @@
                     <tr>
                         <th>Email</th>
                         <th>Name</th>
+                        <th>Status</th>
                         <th>Lock</th>
                         <th>UnLock</th>
                     </tr>
@@ -27,22 +28,30 @@
                     {
                         @foreach (var user in Model)
                         {
-                            <tr>
-                                <td>@user.Email</td>
-                                <td>@user.UserName</td>
-                                <td>
-                                    <a asp-controller="Admin" asp-action="UserLock" asp-route-id="@user.Id"
-                                       style="color:red">
-                                        <i class="fas fa-lock"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-controller="Admin" asp-action="UserunLock" asp-route-id="@user.Id"
-                                       style="color:green">
-                                        <i class="fas fa-lock-open"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                    <tr>
+                        <td>@user.Email</td>
+                        <td>@user.UserName</td>
+                        @if (user.LockoutEnd != null)
+                        {
+                            <td>נעול</td>
+                        }
+                        else
+                        {
+                            <td>פתוח</td>
+                        }
+                        <td>
+                            <a asp-controller="Admin" asp-action="UserLock" asp-route-id="@user.Id"
+                               style="color:red">
+                                <i class="fas fa-lock"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-controller="Admin" asp-action="UserunLock" asp-route-id="@user.Id"
+                               style="color:green">
+                                <i class="fas fa-lock-open"></i>
+                            </a>
+                        </td>
+                    </tr>
                         }
                     }
                 </tbody>

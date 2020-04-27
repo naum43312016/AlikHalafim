@@ -18,6 +18,10 @@ namespace AlikHalafim.Controllers
         }
         public async Task<IActionResult> RegCategory(int id,int page=1)
         {
+            if (TempData["message"] != null)
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
             if (page < 1) page = 1;
             int productPerPage = 12;
             int count = _db.Product.Where(r => r.CategoryId==id).Include(c => c.Category)

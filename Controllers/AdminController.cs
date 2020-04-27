@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AlikHalafim.Data;
+using AlikHalafim.Helpers;
 using AlikHalafim.Models;
+using AlikHalafim.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -159,6 +161,71 @@ namespace AlikHalafim.Controllers
         {
             var users =  _userManager.Users.ToList();
             return View(users);
+        }
+
+        public async Task<IActionResult> Orders()
+        {
+            List<Order> orders = await _db.Order.OrderByDescending(o => o.OrderDate).ToListAsync();
+            return View(orders);
+        }
+
+        public async Task<IActionResult> OrderStatusEdit(int id)
+        {
+            Order order = await _db.Order.FindAsync(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            if (order.Status.Equals(OrderHelper.STATUS_OPEN))
+            {
+                order.Status = OrderHelper.STATUS_CLOSE;
+            }
+            else
+            {
+                order.Status = OrderHelper.STATUS_OPEN;
+            }
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Orders","Admin");
+        }
+
+        public async Task<IActionResult> OrderPaymentStatusEdit(int id)
+        {
+            Order order = await _db.Order.FindAsync(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            if (order.PaymentStatus.Equals(OrderHelper.PAYMENT_STATUS_BAD))
+            {
+                order.PaymentStatus = OrderHelper.PAYMENT_STATUS_GOOD;
+            }
+            else
+            {
+                order.PaymentStatus = OrderHelper.PAYMENT_STATUS_BAD;
+            }
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Orders", "Admin");
+        }
+
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            Order order = await _db.Order.FindAsync(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            List<CartItemForDb> items = await _db.CartItemForDb.Where(c => c.OrderId == id)
+                .ToListAsync();
+            if (items == null)
+            {
+                return NotFound();
+            }
+            OrderDetailViewModel orderVm = new OrderDetailViewModel
+            {
+                Order=order,
+                Products=items
+            };
+            return View(orderVm);
         }
 
         public async Task<IActionResult> UserLock(string id)

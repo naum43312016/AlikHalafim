@@ -1,14 +1,26 @@
 ﻿@model List<Product>
 @{
-    ViewData["Title"] = "Home Page";
-    var message = ViewBag.message;
+    ViewData["Title"] = "אליק חלפי רחובות";
+    string message = ViewBag.message;
 }
 
-@if (message != null && message.Length!=0)
+@if (message != null && message.Length != 0)
 {
-    <script>
-        var notification = alertify.notify('מוצר הוסף לסל', 'success', 5, function () { });
-    </script>
+    @if (message.Equals("added"))
+    {
+        <script>
+            var notification = alertify.notify('מוצר הוסף לסל הקניות', 'success', 5, function () { });
+            $("#cart-item").addClass("animated bounce");
+        </script>
+    }
+    else
+    {
+        <script>
+            var notification = alertify.notify('מוצר אזל מהמלאי', 'success', 5, function () { });
+            $("#cart-item").addClass("animated bounce");
+        </script>
+    }
+    
 }
 
 <div class="row">
@@ -16,17 +28,22 @@
     {
         <div class="col-md-4 col-sm-12">
             <div class="product-grid">
+
                 <div class="product-image">
-                    <a asp-controller="Product" asp-action="ProductPageDetail"
+                    @if (Product.Quantity < 1)
+                    {
+                        <span class="product-new-label">אזל</span>
+                    }
+                    <a asp-controller="Product" asp-action="Index"
                        asp-route-id="@Product.Id" class="image">
                         <img class="pic-1" src="@Product.ProductImage">
                     </a>
                     <h3 class="title" dir="rtl">
-                        <a asp-controller="Product" asp-action="ProductPageDetail"
+                        <a asp-controller="Product" asp-action="Index"
                            asp-route-id="@Product.Id">@Product.ProductName</a>
                     </h3>
                     <h4 class="title" dir="rtl">
-                        <a asp-controller="Manufacturer" asp-action="ManufacturerProducts"
+                        <a asp-controller="Product" asp-action="ProductsManufacturer"
                            asp-route-man="@Product.Manufacturer">@Product.Manufacturer</a>
                     </h4>
                     <div class="price">&#8362; @Product.Price</div>

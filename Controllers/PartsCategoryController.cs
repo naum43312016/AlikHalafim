@@ -18,6 +18,10 @@ namespace AlikHalafim.Controllers
         }
         public async Task<IActionResult> GetProducts(int id,int page=1)
         {
+            if (TempData["message"] != null)
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
             string car = "";
             if (HttpContext.Request.Cookies.ContainsKey("car"))
             {

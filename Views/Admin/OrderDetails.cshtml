@@ -1,0 +1,113 @@
+﻿@model AlikHalafim.ViewModel.OrderDetailViewModel
+@{
+    ViewData["Title"] = "OrderDetails";
+}
+
+    <div class="container" dir="rtl">
+        <ul class="list-group" dir="rtl">
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                תאריך:  @Model.Order.OrderDate.ToString("dd/MM/yyyy")
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                שם לקוח:  @Model.Order.CustomerName
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                מחיר:  @Model.Order.Total
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                מוצרים:
+                <ul>
+                    @foreach (CartItemForDb item in Model.Products)
+                    {
+                        <li>
+                            <a asp-controller="Product" asp-action="Index"
+                               asp-route-id="@item.ProductId" target="_blank">
+                                @item.ProductName
+                            </a>
+                            <ul class="list-group" dir="rtl">
+                                <li class="list-group-item text-right" dir="rtl"
+                                    style="font-size:15px;">
+                                    מחיר:  @item.ProductCurrentPrice
+                                </li>
+                                <li class="list-group-item text-right" dir="rtl"
+                                    style="font-size:15px;">
+                                    כמות:  @item.Quantity
+                                </li>
+                                <li class="list-group-item text-right" dir="rtl"
+                                    style="font-size:15px;">
+                                    מקט:  @item.ProductNumber
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </li>
+
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                סטטוס:  @Model.Order.Status
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                מצב של תשלום:  @Model.Order.PaymentStatus
+            </li>
+
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                טרנזקציה:  @Model.Order.TransactionId
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                אימייל:  @Model.Order.Email
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                מספר טלפון:  @Model.Order.PhoneNumber
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                עיר:  @Model.Order.City
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                כתובת:  @Model.Order.Address
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                מספר בית:  @Model.Order.HouseNumber
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                דירה:  @Model.Order.AppartmentNumber
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                מיקוד:  @Model.Order.PostalCode
+            </li>
+            <li class="list-group-item text-right" dir="rtl"
+                style="font-size:25px;">
+                הערות:  @Model.Order.Comments
+            </li>
+        </ul>
+        <a
+           asp-controller="Admin"
+           asp-action="OrderStatusEdit"
+           asp-route-id="@Model.Order.Id"
+           class="btn btn-primary"
+           style="float:right;color:white;margin-right:45px;margin-top:10px;">
+            שינוי סטטוס הזמנה
+        </a>
+        <a 
+           asp-controller="Admin"
+           asp-action="OrderPaymentStatusEdit"
+           asp-route-id="@Model.Order.Id"
+           class="btn btn-success"
+           style="float:right;color:white;margin-right:10px;margin-top:10px;">
+            שינוי סטטוס תשלום
+        </a>
+    </div>
+
